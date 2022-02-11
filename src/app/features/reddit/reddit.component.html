@@ -151,7 +151,8 @@
           next
         </button>
       </div>
-      <div style="height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center">
+      <div style="height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center"
+           (swipeleft)="goNext()" (swiperight)="goBack()">
 
         <ng-container *ngIf="medias[i].video; else imgV">
           <video autoplay loop style="max-height: 100%; max-width: 100%" [src]="medias[i]?.video" controls></video>
