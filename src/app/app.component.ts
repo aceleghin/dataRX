@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./_services/auth.service";
 import {HttpParams} from "@angular/common/http";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 
 export class tokenresp {
   access_token = '';
@@ -23,23 +23,34 @@ export class AppComponent implements OnInit {
   code: string = '';
   tokenResp = new tokenresp();
 
-  constructor(private auth: AuthService, private route: ActivatedRoute) {
+  constructor(private auth: AuthService, private router: Router, private route: ActivatedRoute) {
   }
 
   ngOnInit() {
+
+    this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.code = this.route.snapshot.queryParams['code'];
+          this.state = this.route.snapshot.queryParams['state'];
+
+          console.log(this.code, this.state)
+
+          if (this.state) {
+            this.auth.getToken(this.code).subscribe((res: tokenresp) => {
+              this.tokenResp = res;
+
+              this.auth.getSubreddits().subscribe(res => {
+                console.log(res)
+              })
+            })
+          }
+        }
+      }
+    );
+
     // state=test&code=HJDDO_oqhI-JwIS6ZjMtvZ9N40IxYw#_
-    this.code = this.route.snapshot.queryParams['code'];
-    this.state = this.route.snapshot.queryParams['state'];
 
-    if (this.state) {
-      this.auth.getToken(this.code).subscribe((res: tokenresp) => {
-        this.tokenResp = res;
 
-        this.auth.getSubreddits().subscribe(res => {
-          console.log(res)
-        })
-      })
-    }
   }
 
   login() {
