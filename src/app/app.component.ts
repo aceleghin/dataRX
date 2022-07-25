@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
             this.auth.getToken(this.code).subscribe((res: tokenresp) => {
               this.tokenResp = res;
 
-              this.auth.getSubreddits().subscribe(res => {
+              this.auth.getSubreddits(res.access_token).subscribe(res => {
                 console.log(res)
               })
             })
