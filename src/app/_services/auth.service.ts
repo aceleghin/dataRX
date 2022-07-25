@@ -13,13 +13,20 @@ export class AuthService {
 
   getToken(code: string) {
     // grant_type=authorization_code&code=CODE&redirect_uri=URI
+    // const basic = base64.encode(data.client_id + ':')
+    const user = 'Oe50FeFo9UYAazJ_kgwcRA';
+    const password = 'r4MaNe7RA9LjvMGwmkhHmm042WM__w'
 
-    const headers = new HttpHeaders().set('Content-Type', `application/x-www-form-urlencoded; charset=UTF-8`)
+
+    const headers = new HttpHeaders()
+
+      .set('Content-Type', `application/x-www-form-urlencoded`)
+      .set('Authorization', `Basic ${window.btoa(user + ':' + password)}`)
 
     return this.http.post<tokenresp>(`https://www.reddit.com/api/v1/access_token`, {
-      'grant_type': 'authorization_code',
-      'code': code,
-      'redirect_uri': 'https://datarx-15696.web.app/'
+      grant_type: 'authorization_code',
+      code: code,
+      redirect_uri: 'https://datarx-15696.web.app/'
     }, {headers})
   }
 
